@@ -1,0 +1,117 @@
+#include <iostream>
+using namespace std;
+
+class Matrix{
+private:
+    int rows;       
+    int cols;        
+    int**  matrix;
+	
+	public:
+	Matrix(int r,int c) 
+	{
+		rows=r;
+		cols=c;
+		matrix= new int*[rows];
+		for(int i=0;i<rows;i++)
+		{
+			matrix[i]=new int[cols];
+			for(int j=0;j<cols;j++)
+			{
+				matrix[i][j]=0;
+			}
+		}
+	}
+	
+	
+ void freeMemory() {
+        for (int i=0; i<rows;++i) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+    }
+    
+    
+    void resize(int newRows, int newCols, int v=0) {
+        int** newMatrix = new int*[newRows];
+        for (int i = 0; i <newRows; ++i) {
+            newMatrix[i] = new int[newCols];
+        }
+
+        for (int i = 0; i < newRows; ++i) {
+            for (int j = 0; j < newCols; ++j) {
+                if (i <rows&&j<cols) {
+                    newMatrix[i][j] = matrix[i][j];
+                } else {
+                    newMatrix[i][j] = v;
+                }
+            }
+        }
+
+        freeMemory();
+
+        matrix=newMatrix;
+        rows=newRows;
+        cols=newCols;
+    }
+
+    void transpose() {
+        int** transpose = new int*[cols];
+        for (int i=0; i<cols; ++i) {
+            transpose[i] = new int[rows];
+            for (int j=0;j<rows; ++j) {
+                transpose[i][j]=matrix[j][i];
+            }
+        }
+
+        freeMemory();
+
+        matrix=transpose;
+        int temp=rows;
+        rows=cols;
+        cols=temp;
+    }
+
+    void print() const {
+        for (int i = 0; i < rows; ++i) {
+            for (int j=0;j<cols;++j) {
+                int val = matrix[i][j];
+                if ((i+j)%2== 1) {
+                    val +=2;
+                }
+                cout<<val<<" ";
+            }
+            cout<<endl;
+        }
+    }
+   
+    void set(int r, int c, int val) {
+        if ((r>=0 && r<rows) && (c>= 0 && c<cols)) {
+            matrix[r][c] = val;
+        }
+    }
+};
+
+int main() {
+    Matrix Matrix(3, 3);
+    cout << "Original matrix:" << endl;
+    Matrix.print();
+
+    Matrix.set(0, 8, 5);
+    Matrix.set(1, 4, 9);
+
+    cout << "\nAfter changes:" << endl;
+    Matrix.print();
+
+    Matrix.resize(4, 4, 0);
+    cout << "\nAfter resizing to 4x4:" << endl;
+    Matrix.print();
+
+    Matrix.transpose();
+    cout << "\nAfter transpose:" << endl;
+    Matrix.print();
+
+    return 0;
+}
+
+}
