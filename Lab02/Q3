@@ -1,0 +1,74 @@
+#include <iostream>
+using namespace std;
+
+class JaggedArray {
+public:
+    int** score;  
+    int* TeamPlayers;  // represents no. of players in each team
+    int teams;  // each row is a seperate team  
+
+    JaggedArray(int r, int* sizes) {
+        teams=r;
+        TeamPlayers=new int[teams];
+        score= new int*[teams];
+
+        for (int i=0;i<teams;i++) {
+            TeamPlayers[i] =sizes[i];
+            score[i] = new int[TeamPlayers[i]];
+            for (int j =0;j<TeamPlayers[i]; j++)
+                score[i][j] = 0;
+        }
+    }
+
+    
+    ~JaggedArray() {
+        for (int i=0;i<teams;i++)
+            delete[] score[i];
+        delete[] score;
+        delete[] TeamPlayers;
+    }
+
+    void store(int i, int j, int value) {
+        if ((i>=0 && i<teams) && (j>=0 && j<TeamPlayers[j]))
+            score[i][j] = value;
+    }
+
+
+    void print() {
+        for (int i=0;i<teams; i++) {
+            cout <<"TEAM " << i << ": ";
+            for (int j=0;j<TeamPlayers[i];j++)
+                cout<<score[i][j]<< " ";
+            cout<<endl;
+        }
+    }
+
+    int sum(int row) {
+        int total = 0;
+        for (int j=0;j<TeamPlayers[row]; j++)
+            total += score[row][j];
+        return total;
+    }
+};
+
+int main() {
+    int sizes[3] = {3, 2, 4};
+    JaggedArray jagged(3, sizes);
+
+    jagged.store(0, 0, 5);
+    jagged.store(0, 1, 1);
+    jagged.store(0, 2, 16);
+    jagged.store(1, 0, 15); 
+    jagged.store(1, 1, 0);
+    jagged.store(2, 0, 7);
+    jagged.store(2, 1, 20);
+    jagged.store(2, 2, 16);
+    jagged.store(2, 3, 8);
+
+    jagged.print();
+
+    for (int i=0;i<3; i++)
+        cout<<"Sum of scores of Team " << i << " : " << jagged.sum(i) << endl;
+
+    return 0;
+}
