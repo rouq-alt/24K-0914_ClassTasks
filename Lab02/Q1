@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+class DynamicArray {
+private:
+    int* data;         
+    int size;          
+    int capacity;   
+
+public:
+   DynamicArray(int i) {
+        capacity=i;
+        size = 0;
+        data = new int[capacity];
+    }
+    
+     void InsertValues(int value) {
+        if (size==capacity) {
+            resize_Array();
+        }
+        data[size++]=value;
+    }
+
+    void resize_Array() {
+        int new_Capacity =capacity*2;
+        int* newData = new int[new_Capacity];
+        for (int i=0;i<size; ++i) {
+            newData[i]=data[i];
+        }
+
+        delete[] data;
+        data = newData;
+        capacity = new_Capacity;
+    }
+
+    ~DynamicArray() {
+        delete[] data;
+    }
+
+    void print() const {
+        for (int i=0;i<size;++i) {
+            cout << data[i] << " ";
+        }
+        cout<<endl;
+    }
+
+};
+int main() {
+    DynamicArray array1(3);
+    array1.InsertValues(4);
+    array1.InsertValues(6);
+    array1.InsertValues(3);
+    array1.InsertValues(7);
+    array1.InsertValues(8);
+    cout << "Array elements: ";
+    array1.print();
+
+    return 0;
+}
