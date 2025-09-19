@@ -1,0 +1,157 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int generateRandomNumber() {
+    return rand() % 100 + 1;
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void bubbleSort(int arr[], int n, int &compCount) {
+    compCount = 0;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            compCount++;
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void insertionSort(int arr[], int n, int &compCount) {
+    compCount = 0;
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            compCount++;
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void selectionSort(int arr[], int n, int &compCount) {
+    compCount = 0;
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            compCount++;
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        swap(arr[i], arr[minIdx]);
+    }
+}
+
+void shellSort(int arr[], int n, int &compCount) {
+    compCount = 0;
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                compCount++;
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+    srand(time(0)); 
+
+    const int size20 = 20;
+    int arr20[size20];
+
+    for (int i = 0; i < size20; i++) {
+        arr20[i] = generateRandomNumber();
+    }
+
+    cout << "Original Array (Size 20): ";
+    printArray(arr20, size20);
+
+    int compCount = 0;
+    int arrBubble[size20];
+    copy(begin(arr20), end(arr20), begin(arrBubble));
+    bubbleSort(arrBubble, size20, compCount);
+    cout << "Bubble Sorted Array: ";
+    printArray(arrBubble, size20);
+    cout << "Bubble Sort Comparisons: " << compCount << endl;
+
+    int arrInsert[size20];
+    copy(begin(arr20), end(arr20), begin(arrInsert));
+    insertionSort(arrInsert, size20, compCount);
+    cout << "Insertion Sorted Array: ";
+    printArray(arrInsert, size20);
+    cout << "Insertion Sort Comparisons: " << compCount << endl;
+
+    int arrSelect[size20];
+    copy(begin(arr20), end(arr20), begin(arrSelect));
+    selectionSort(arrSelect, size20, compCount);
+    cout << "Selection Sorted Array: ";
+    printArray(arrSelect, size20);
+    cout << "Selection Sort Comparisons: " << compCount << endl;
+
+    int arrShell[size20];
+    copy(begin(arr20), end(arr20), begin(arrShell));
+    shellSort(arrShell, size20, compCount);
+    cout << "Shell Sorted Array: ";
+    printArray(arrShell, size20);
+    cout << "Shell Sort Comparisons: " << compCount << endl;
+
+    const int size100 = 100;
+    int arr100[size100];
+
+    
+    for (int i = 0; i < size100; i++) {
+        arr100[i] = generateRandomNumber();
+    }
+
+  
+    cout << "\nOriginal Array (Size 100): ";
+    printArray(arr100, size100);
+
+    int arrBubble100[size100];
+    copy(begin(arr100), end(arr100), begin(arrBubble100));
+    bubbleSort(arrBubble100, size100, compCount);
+    cout << "Bubble Sorted Array: ";
+    printArray(arrBubble100, size100);
+    cout << "Bubble Sort Comparisons: " << compCount << endl;
+
+    int arrInsert100[size100];
+    copy(begin(arr100), end(arr100), begin(arrInsert100));
+    insertionSort(arrInsert100, size100, compCount);
+    cout << "Insertion Sorted Array: ";
+    printArray(arrInsert100, size100);
+    cout << "Insertion Sort Comparisons: " << compCount << endl;
+
+    int arrSelect100[size100];
+    copy(begin(arr100), end(arr100), begin(arrSelect100));
+    selectionSort(arrSelect100, size100, compCount);
+    cout << "Selection Sorted Array: ";
+    printArray(arrSelect100, size100);
+    cout << "Selection Sort Comparisons: " << compCount << endl;
+
+  
+    int arrShell100[size100];
+    copy(begin(arr100), end(arr100), begin(arrShell100));
+    shellSort(arrShell100, size100, compCount);
+    cout << "Shell Sorted Array: ";
+    printArray(arrShell100, size100);
+    cout << "Shell Sort Comparisons: " << compCount << endl;
+
+    return 0;
+}
