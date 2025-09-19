@@ -1,0 +1,72 @@
+#include <iostream>
+
+using namespace std;
+int interpolationSearch(int arr[], int n, int key) {
+    int low = 0;
+    int high = n-1;
+
+    while (low <= high && key >=arr[low] && key<=arr[high]) {
+        int pos=low+((double)(high-low)/(arr[high]-arr[low])) *(key-arr[low]);
+        if (arr[pos]==key) {
+            return pos;
+        }
+        if (arr[pos]<key) {
+            low = pos+1;
+        }
+        else {
+            high=pos-1;
+        }
+    }
+    return -1; 
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void bubbleSort(int arr[], int n) {
+    for (int i=0; i<n-1; i++) {
+        for (int j = 0; j <n-i- 1; j++) {
+            if (arr[j] > arr[j+1]) {
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int arr[] = {4, 34, 68, 12, 22, 1, 0};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int key = 21;
+    cout<<"The array: ";
+    printArray(arr, n);
+    bubbleSort(arr, n);
+    cout << "Sorting the array before searching: ";
+    printArray(arr, n);
+    int result = interpolationSearch(arr, n, key);
+    if (result != -1) {
+        cout << "Element found at index "<<result<< endl;
+    }
+	 else {
+        cout << "Element not found in the array" << endl;
+    }
+    int key2=1;
+    cout<<"The array: ";
+    printArray(arr, n);
+    bubbleSort(arr, n);
+    cout << "Sorting the array before searching: ";
+    printArray(arr, n);
+    int result = interpolationSearch(arr, n, key2);
+    if (result != -1) {
+        cout << "Element found at index "<<result<< endl;
+    }
+	 else {
+        cout << "Element not found in the array" << endl;
+    }
+
+    return 0;
+}
