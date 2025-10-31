@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data=val;
+        left=right=NULL;
+    }
+};
+
+Node* createNode(int val) {
+    return new Node(val);
+}
+
+bool isFullBinary(Node* root) {
+    if (!root)
+        return true;  
+    if (!root->left && !root->right)
+        return true;
+    if (root->left && root->right)
+        return isFullBinary(root->left) && isFullBinary(root->right);
+
+    return false;
+}
+
+int main() {
+    Node* root = createNode(1);
+    root->left = createNode(2);
+    root->right = createNode(3);
+    root->left->left = createNode(4);
+    root->right->left = createNode(6);
+    root->right->right = createNode(7);
+
+    cout << "Checking the tree:";
+
+    if (isFullBinary(root))
+    {
+        cout << "The tree is a Full Binary Tree.\n";
+    cout<<endl;}
+    else
+        cout << "The tree is NOT a Full Binary Tree.\n";
+
+    return 0;
+}
