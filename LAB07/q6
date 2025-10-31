@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int empID;
+    Node* left;
+    Node* right;
+
+    Node(int id) {
+        empID = id;
+        left = right = NULL;
+    }
+};
+
+class EmployeeBST {
+private:
+    Node* root;
+
+    Node* insert(Node* node, int id) {
+        if (!node) return new Node(id);
+        if (id < node->empID)
+            node->left = insert(node->left, id);
+        else if (id > node->empID)
+            node->right = insert(node->right, id);
+        return node;
+    }
+
+    Node* lowAncestor(Node* node, int id1, int id2) {
+        if (!node) return NULL;
+
+        if (id1 < node->empID && id2 < node->empID)
+            return lowAncestor(node->left, id1, id2);
+
+        if (id1 > node->empID && id2 > node->empID)
+            return lowAncestor(node->right, id1, id2);
+
+        return node;2
+    }
+
+public:
+    EmployeeBST() { root = NULL; }
+
+    void addEmployee(int id) {
+        root = insert(root, id);
+    }
+
+    void lowestCommonManager(int id1, int id2) {
+        Node* lca = lowAncestor(root, id1, id2);
+        if (lca)
+            cout << "Lowest Common Manager for " << id1 << " and " << id2
+                 << " is Employee ID: " << lca->empID << endl;
+        else
+            cout << "Employees not found in the hierarchy.\n";
+    }
+};
+
+int main() {
+    EmployeeBST company;
+    company.addEmployee(50);
+    company.addEmployee(30);
+    company.addEmployee(70);
+    company.addEmployee(20);
+    company.addEmployee(40);
+    company.addEmployee(60);
+    company.addEmployee(80);
+
+    int emp1, emp2;
+    cout << "Enter two employee IDs: ";
+    cin >> emp1 >> emp2;
+
+    company.lowestCommonManager(emp1, emp2);
+
+    return 0;
+}
