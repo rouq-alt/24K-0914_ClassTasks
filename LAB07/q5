@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int id;
+    int qty;
+    Node* left;
+    Node* right;
+
+    Node(int productId, int quantity) {
+        id = productId;
+        qty = quantity;
+        left = right = NULL;
+    }
+};
+
+class ProductBST {
+private:
+    Node* root;
+
+    Node* insert(Node* node, int id, int qty) {
+        if (!node) return new Node(id, qty);
+
+        if (id == node->id)
+            node->qty += qty;
+        else if (id < node->id)
+            node->left = insert(node->left, id, qty);
+        else
+            node->right = insert(node->right, id, qty);
+
+        return node;
+    }
+
+    Node* search(Node* node, int id) {
+        if (!node || node->id == id) return node;
+        if (id < node->id) return search(node->left, id);
+        return search(node->right, id);
+    }
+
+    void findMaxQty(Node* node, Node*& maxNode) {
+        if (!node) return;
+        if (!maxNode || node->qty > maxNode->qty)
+            maxNode = node;
+        findMaxQty(node->left, maxNode);
+        findMaxQty(node->right, maxNode);
+    }
+
+public:
+    ProductBST() { root = NULL; }
+
+    void addProduct(int id, int qty) {
+        root = insert(root, id, qty);
+    }
+
+    void searchProduct(int id) {
+        Node* result = search(root, id);
+        if (result)
+            cout << "Product ID " << id << " found with quantity: " << result->qty << endl;
+        else
+            cout << "Product ID " << id << " not found.\n";
+    }
+
+    void highestStock() {
+        Node* maxNode = NULL;
+        findMaxQty(root, maxNode);
+        if (maxNode)
+            cout << "Product with highest stock: ID " << maxNode->id
+                 << " (Quantity: " << maxNode->qty << ")\n";
+        else
+            cout << "No products available.\n";
+    }
+};
+
+int main() {
+    ProductBST store;
+    store.addProduct(50, 20);
+    store.addProduct(30, 10);
+    store.addProduct(70, 40);
+    store.addProduct(20, 5);
+    store.addProduct(40, 15);
+    store.addProduct(70, 10);
+
+    cout << "=== Product Search ===\n";
+    store.searchProduct(40);
+    store.searchProduct(100);
+
+    cout << "\n=== Product with Highest Stock ===\n";
+    store.highestStock();
+
+    return 0;
+}
