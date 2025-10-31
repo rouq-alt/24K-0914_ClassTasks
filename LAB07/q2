@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int value;
+    Node* leftChild;
+    Node* rightChild;
+
+    Node(int val) {
+        value = val;
+        leftChild = rightChild = NULL;
+    }
+};
+
+Node* createNode(int val) {
+    return new Node(val);
+}
+
+int countAllNodes(Node* rootNode) {
+    if (!rootNode)
+        return 0;
+    return 1 + countAllNodes(rootNode->leftChild) + countAllNodes(rootNode->rightChild);
+}
+
+int countLeafNodes(Node* rootNode) {
+    if (!rootNode)
+        return 0;
+    if (!rootNode->leftChild && !rootNode->rightChild)
+        return 1;
+    return countLeafNodes(rootNode->leftChild) + countLeafNodes(rootNode->rightChild);
+}
+
+int findTreeHeight(Node* rootNode) {
+    if (!rootNode)
+        return 0;
+    int leftHeight = findTreeHeight(rootNode->leftChild);
+    int rightHeight = findTreeHeight(rootNode->rightChild);
+    return 1 + max(leftHeight, rightHeight);
+}
+
+int main() {
+    Node* rootNode = createNode(10);
+    rootNode->leftChild = createNode(6);
+    rootNode->rightChild = createNode(15);
+    rootNode->leftChild->leftChild = createNode(3);
+    rootNode->leftChild->rightChild = createNode(8);
+    rootNode->rightChild->leftChild = createNode(12);
+    rootNode->rightChild->rightChild = createNode(18);
+
+    cout << "===== Binary Tree Properties =====\n";
+    cout << "Total Nodes: " << countAllNodes(rootNode) << endl;
+    cout << "Leaf Nodes: " << countLeafNodes(rootNode) << endl;
+    cout << "Tree Height: " << findTreeHeight(rootNode) << endl;
+
+    return 0;
+}
