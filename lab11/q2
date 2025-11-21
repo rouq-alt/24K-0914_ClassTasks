@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+
+const int SIZE = 100;
+class Node {
+public:
+    string word;
+    Node* next;
+
+    Node(string w) {
+        word = w;
+        next = NULL;
+    }
+};
+
+class Dictionary {
+private:
+    Node* table[SIZE];
+    int hashFunction(const string& s) {
+        int sum = 0;
+        for (int i = 0; i < s.length(); i++) {
+            sum += int(s[i]);
+        }
+        return sum % SIZE;
+    }
+
+public:
+    Dictionary() {
+        for (int i =0; i < SIZE; i++)
+            table[i] = NULL;
+    }
+
+    void Add_Record(const string& word) {
+        int index = hashFunction(word);
+        Node* newNode = new Node(word);
+
+        if (table[index] ==NULL) {
+            table[index] =newNode;
+        } else {
+            Node* temp = table[index];
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next =newNode;
+        }
+
+        cout << "Word \"" << word << "\"added at index" <<index<<endl;
+    }
+    void Word_Search(const string& word) {
+        int index = hashFunction(word);
+        Node* temp = table[index];
+
+        while (temp != NULL) {
+            if (temp->word == word) {
+                cout << "Word Found: " <<word<<" at index " << index<<endl;
+                return;
+            }
+            temp = temp->next;
+        }
+
+        cout <<word << " not found in dictionary.\n";
+    }
+
+    void Print_Dictionary() {
+        for (int i = 0; i < SIZE; i++) {
+            cout << i << ": ";
+            Node* temp = table[i];
+            while (temp != NULL) {
+                cout << temp->word << " -> ";
+                temp = temp->next;
+            }
+            cout << "NULL\n";
+        }
+    }
+};
+int main() {
+    Dictionary dict;
+    dict.Add_Record("apple");
+    dict.Add_Record("grapes");
+    dict.Add_Record("banana");
+    dict.Add_Record("kiwi");
+  
+
+    cout << endl;
+    dict.Word_Search("banana");
+    dict.Word_Search("fish");
+
+    cout << endl;
+    dict.Print_Dictionary();
+
+    return 0;
+}
