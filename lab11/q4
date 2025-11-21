@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+struct S {
+    int r;
+    string n;
+    bool e;
+};
+
+class StudentHashTable {
+private:
+    S t[15];
+
+public:
+    StudentHashTable() {
+        for (int i = 0; i < 15; i++) {
+            t[i].e = true;
+        }
+    }
+
+    void InsertRecord(int r, string n) {
+        int i = r % 15;
+        for (int a = 0; a < 15; a++) {
+            int p = (i + a * a) % 15;
+            if (t[p].e) {
+                t[p].r = r;
+                t[p].n = n;
+                t[p].e = false;
+                cout << "Inserted at index " << p << endl;
+                return;
+            }
+        }
+        cout << "Table full\n";
+    }
+
+    void SearchRecord(int r) {
+        int i = r % 15;
+        for (int a = 0; a < 15; a++) {
+            int p = (i + a * a) % 15;
+            if (!t[p].e && t[p].r == r) {
+                cout << "Student: " << t[p].n << endl;
+                return;
+            }
+        }
+        cout << "Record not found\n";
+    }
+};
+
+int main() {
+    StudentHashTable h;
+
+    h.InsertRecord(101, "Zainab");
+    h.InsertRecord(116, "Ali");
+    h.InsertRecord(131, "Sara");
+
+    h.SearchRecord(116);
+    h.SearchRecord(150);
+
+    return 0;
+}
