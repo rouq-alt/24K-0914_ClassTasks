@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+const int SIZE = 10;
+
+class Node {
+public
+    string data;  
+    Node* next;
+
+    Node(string value) {
+        data=value;
+        next=NULL;
+    }
+};
+
+class HashTable {
+private:
+    Node* table[SIZE];
+    int hashFunction(const string& s) {
+        int sum = 0;
+        for (int i=0; i<s.length();i++) {
+            sum +=int(s[i]);  
+        }
+        return sum%SIZE;
+    }
+
+public:
+    HashTable() {
+        for (int i=0;i<SIZE;i++) {
+            table[i] = NULL;
+        }
+    }
+
+    void insert(const string& value) {
+        int index = hashFunction(value);
+        Node* newNode = new Node(value);
+
+        if (table[index]==NULL) {
+            table[index] =newNode;
+        }
+        else {
+           
+            Node* temp =table[index];
+            while (temp->next !=NULL) {
+                temp =temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+ 
+    void display() {
+        for (int i = 0; i < SIZE; i++) {
+            cout << i << ": ";
+            Node* temp = table[i];
+            while (temp != NULL) {
+                cout<<temp->data<<" ->";
+                temp=temp->next;
+            }
+            cout << "NULL\n";
+        }
+    }
+};
+
+int main() {
+    HashTable ht;
+
+    ht.insert("apple");
+    ht.insert("banana");
+    ht.insert("pomegrenate");
+    ht.insert("grapes");
+    ht.insert("cherry");
+
+    ht.display();
+
+    return 0;
+}
