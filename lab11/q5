@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class EmployeeHashTable {
+private:
+    string t[50];
+
+    int asciiSum(string x) {
+        int s = 0;
+        for (char c : x) s += int(c);
+        return s;
+    }
+
+public:
+    EmployeeHashTable() {
+        for (int i = 0; i < 50; i++)
+            t[i] = "";
+    }
+
+    void Add_Employee(string x) {
+        int s = asciiSum(x);
+        int h1 = s % 50;
+        int h2 = 7 - (s % 7);  // double hashing step size
+
+        for (int i = 0; i < 50; i++) {
+            int idx = (h1 + i * h2) % 50;
+            if (t[idx] == "") {
+                t[idx] = x;
+                cout << "Inserted \"" << x << "\" at index " << idx << endl;
+                return;
+            }
+        }
+        cout << "Hash table full\n";
+    }
+
+    void Search_Employee(string x) {
+        int s = asciiSum(x);
+        int h1 = s % 50;
+        int h2 = 7 - (s % 7);
+
+        for (int i = 0; i < 50; i++) {
+            int idx = (h1 + i * h2) % 50;
+            if (t[idx] == x) {
+                cout << "Employee \"" << x << "\" found at index " << idx << endl;
+                return;
+            }
+        }
+        cout << "Employee \"" << x << "\" not found in the directory.\n";
+    }
+
+    void Display_Table() {
+        for (int i = 0; i < 50; i++) {
+            cout << i << ": " << t[i] << endl;
+        }
+    }
+};
+
+int main() {
+    // Create the employee hash table
+    EmployeeHashTable employeeDirectory;
+
+    // Add employees
+    employeeDirectory.Add_Employee("Zainab");
+    employeeDirectory.Add_Employee("Ali");
+    employeeDirectory.Add_Employee("Sara");
+    employeeDirectory.Add_Employee("Ahmed");
+    employeeDirectory.Add_Employee("Fatima");
+
+    cout << "\n";
+
+    // Search employees
+    employeeDirectory.Search_Employee("Ali");      // Found
+    employeeDirectory.Search_Employee("Mohammed"); // Not found
+
+    cout << "\nEmployee Directory:\n";
+    // Display the full hash table
+    employeeDirectory.Display_Table();
+
+    return 0;
+}
